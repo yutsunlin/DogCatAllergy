@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>毛孩皮膚搔癢自我評估工具</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:    #2C1A0E;
+  --teal:    #C47B30;
+  --mint:    #F5A053;
+  --mintLt:  #FDE8D0;
+  --green:   #15803D;
+  --greenLt: #DCFCE7;
+  --greenBd: #86EFAC;
+  --amber:   #D97706;
+  --amberLt: #FEF3C7;
+  --amberBd: #FCD34D;
+  --red:     #DC2626;
+  --redLt:   #FEE2E2;
+  --redBd:   #FCA5A5;
+  --sky:     #0284C7;
+  --skyLt:   #E0F2FE;
+  --purple:  #7C3AED;
+  --purpleLt:#EDE9FE;
+  --gray50:  #F8FAFC;
+  --gray100: #F1F5F9;
+  --gray200: #E2E8F0;
+  --gray300: #CBD5E1;
+  --gray500: #64748B;
+  --gray700: #334155;
+  --gray900: #0F172A;
+  --white:   #FFFFFF;
+  --radius:  8px;
+  --radius-lg: 12px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  background: var(--gray50);
+  color: var(--gray900);
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+a { color: var(--teal); }
+
+/* ── Layout ── */
+.site-header {
+  background: #2C1A0E;
+  padding: 20px 24px 18px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.site-header-inner {
+  max-width: 820px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.site-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-icon {
+  width: 34px;
+  height: 34px;
+  background: var(--mint);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+.logo-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.2;
+}
+.logo-sub {
+  font-size: 11px;
+  color: #FDBA74;
+  font-weight: 400;
+}
+.header-ref {
+  font-size: 11px;
+  color: #FDBA74;
+  text-align: right;
+  line-height: 1.4;
+}
+
+.container {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 28px 20px 60px;
+}
+
+/* ── Tab nav ── */
+.tab-nav {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--gray200);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 24px;
+  background: var(--white);
+}
+.tab-btn {
+  flex: 1;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  border-right: 1px solid var(--gray200);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gray500);
+  cursor: pointer;
+  transition: all .15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+.tab-btn:last-child { border-right: none; }
+.tab-btn:hover { background: var(--gray50); color: var(--gray700); }
+.tab-btn.active { background: #C47B30; color: var(--white); }
+.tab-btn .tab-num {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.15);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.tab-btn:not(.active) .tab-num { background: var(--gray200); color: var(--gray700); }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── Cards ── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--gray200);
+  border-radius: var(--radius-lg);
+  padding: 20px 22px;
+  margin-bottom: 16px;
+}
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── PVAS Tool ── */
+.pet-tabs {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--gray200);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 16px;
+  width: fit-content;
+  background: var(--white);
+}
+.pet-tab {
+  padding: 9px 24px;
+  background: none;
+  border: none;
+  border-right: 1px solid var(--gray200);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gray500);
+  cursor: pointer;
+  transition: all .15s;
+  display: flex; align-items: center; gap: 6px;
+}
+.pet-tab:last-child { border-right: none; }
+.pet-tab:hover { background: var(--gray50); }
+.pet-tab.active { background: var(--navy); color: var(--white); }
+
+.hint-box {
+  font-size: 13px;
+  color: var(--gray700);
+  line-height: 1.65;
+  padding: 11px 14px;
+  border: 1px solid var(--gray200);
+  border-radius: var(--radius);
+  background: var(--gray50);
+  margin-bottom: 16px;
+}
+.hint-box strong { color: var(--navy); }
+
+.section-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gray500);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.score-list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--gray200);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--white);
+}
+.score-row {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  border-bottom: 1px solid var(--gray200);
+  cursor: pointer;
+  transition: background .12s;
+}
+.score-row:last-child { border-bottom: none; }
+.score-row:hover { background: var(--gray50); }
+.score-row.active { background: var(--skyLt); }
+
+.score-num {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+  border-right: 1px solid var(--gray200);
+}
+.score-row.active .score-num { border-right-color: #BAE6FD; }
+.num-val {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+}
+.num-label {
+  font-size: 10px;
+  color: var(--gray500);
+  margin-top: 3px;
+  text-align: center;
+  line-height: 1.3;
+}
+.score-row.active .num-val { color: var(--sky); }
+.score-row.s0 .num-val,.score-row.s1 .num-val,.score-row.s2 .num-val,.score-row.s3 .num-val { color: var(--green); }
+.score-row.s4 .num-val,.score-row.s5 .num-val,.score-row.s6 .num-val { color: var(--amber); }
+.score-row.s7 .num-val,.score-row.s8 .num-val,.score-row.s9 .num-val,.score-row.s10 .num-val { color: var(--red); }
+.score-row.active .num-val { color: var(--sky) !important; }
+.score-row.active .num-label { color: var(--sky); }
+
+.score-content { padding: 12px 14px; }
+.score-head { font-size: 13px; font-weight: 700; margin-bottom: 4px; color: var(--gray900); }
+.score-row.active .score-head { color: var(--sky); }
+.score-desc { font-size: 12px; color: var(--gray500); line-height: 1.6; }
+.score-row.active .score-desc { color: var(--sky); }
+.criteria-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 7px; }
+.ctag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: var(--gray100);
+  border: 1px solid var(--gray200);
+  color: var(--gray500);
+}
+.score-row.active .ctag { background: #DBEAFE; border-color: #BFDBFE; color: var(--sky); }
+
+.result-box {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid;
+  display: none;
+}
+.result-box.show { display: block; }
+.result-box.success { border-color: var(--greenBd); background: var(--greenLt); }
+.result-box.warning { border-color: var(--amberBd); background: var(--amberLt); }
+.result-box.danger  { border-color: var(--redBd);   background: var(--redLt);   }
+.result-box .rx-score { font-size: 20px; font-weight: 700; margin-bottom: 2px; }
+.result-box.success .rx-score,.result-box.success .rx-label { color: var(--green); }
+.result-box.warning .rx-score,.result-box.warning .rx-label { color: var(--amber); }
+.result-box.danger  .rx-score,.result-box.danger  .rx-label { color: var(--red);   }
+.result-box .rx-label { font-size: 12px; margin-bottom: 8px; font-weight: 500; }
+.result-box .rx-advice { font-size: 13px; color: var(--gray700); line-height: 1.65; }
+.result-box .rx-actions { margin-top: 10px; }
+.btn-next {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 18px;
+  border-radius: var(--radius);
+  border: none;
+  background: #C47B30;
+  color: var(--white);
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.btn-next:hover { opacity: .85; }
+
+/* ── Assessment Tool ── */
+.progress-bar {
+  height: 4px;
+  background: var(--gray200);
+  border-radius: 2px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--mint);
+  border-radius: 2px;
+  transition: width .3s ease;
+}
+
+.step-panel { display: none; }
+.step-panel.active { display: block; }
+
+.step-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--teal);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+h2.step-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 6px;
+  line-height: 1.35;
+}
+.step-sub {
+  font-size: 13px;
+  color: var(--gray500);
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.pet-select {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.pet-card {
+  padding: 18px 16px;
+  border: 1.5px solid var(--gray200);
+  border-radius: var(--radius-lg);
+  background: var(--white);
+  cursor: pointer;
+  text-align: center;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gray700);
+  transition: all .15s;
+}
+.pet-card:hover { border-color: var(--teal); }
+.pet-card.active { border-color: #C47B30; background: #C47B30; color: var(--white); }
+.pet-card .picon { font-size: 32px; display: block; margin-bottom: 6px; }
+
+.opts { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.opt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border: 1.5px solid var(--gray200);
+  border-radius: var(--radius);
+  cursor: pointer;
+  background: var(--white);
+  font-size: 14px;
+  color: var(--gray900);
+  transition: all .15s;
+}
+.opt:hover { border-color: var(--teal); }
+.opt.active { border-color: var(--navy); background: var(--skyLt); color: var(--sky); }
+.opt .radio {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gray300);
+  flex-shrink: 0;
+  transition: all .15s;
+}
+.opt.active .radio { border-color: var(--navy); background: var(--navy); }
+
+.checklist { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.chk {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 11px 14px;
+  border: 1.5px solid var(--gray200);
+  border-radius: var(--radius);
+  cursor: pointer;
+  background: var(--white);
+  font-size: 13px;
+  color: var(--gray900);
+  transition: all .15s;
+  line-height: 1.5;
+}
+.chk:hover { border-color: var(--teal); }
+.chk.active { border-color: var(--navy); background: var(--skyLt); color: var(--sky); }
+.chk .chkbox {
+  width: 16px; height: 16px;
+  border-radius: 3px;
+  border: 1.5px solid var(--gray300);
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.chk.active .chkbox {
+  border-color: var(--navy);
+  background: var(--navy);
+}
+.chk.active .chkbox::after {
+  content: '';
+  width: 8px; height: 5px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(-45deg) translate(1px,-1px);
+}
+
+.step-divider {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gray500);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  border-top: 1px solid var(--gray200);
+  padding-top: 12px;
+  margin: 16px 0 10px;
+}
+
+.nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 12px;
+}
+.step-count { font-size: 13px; color: var(--gray500); }
+.nav-btns { display: flex; gap: 10px; }
+.btn-back {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 14px;
+  padding: 9px 20px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--gray300);
+  background: var(--white);
+  color: var(--gray700);
+  cursor: pointer;
+  transition: all .15s;
+}
+.btn-back:hover { background: var(--gray50); }
+.btn-fwd {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 9px 22px;
+  border-radius: var(--radius);
+  border: none;
+  background: #C47B30;
+  color: var(--white);
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.btn-fwd:hover { opacity: .85; }
+
+.err-msg {
+  font-size: 13px;
+  color: var(--red);
+  margin-top: 6px;
+  display: none;
+}
+
+/* ── Result ── */
+.result-card {
+  background: var(--white);
+  border: 1px solid var(--gray200);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  margin-bottom: 12px;
+}
+.result-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+.result-card p { font-size: 13px; color: var(--gray500); line-height: 1.65; }
+.result-card.success { border-color: var(--greenBd); background: var(--greenLt); }
+.result-card.success h3 { color: var(--green); }
+.result-card.warning { border-color: var(--amberBd); background: var(--amberLt); }
+.result-card.warning h3 { color: var(--amber); }
+.result-card.danger  { border-color: var(--redBd);   background: var(--redLt);   }
+.result-card.danger h3  { color: var(--red); }
+.result-card.accent  { border-color: #BAE6FD; background: var(--skyLt); }
+.result-card.accent h3  { color: var(--sky); }
+
+.score-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
+.score-badge.low  { background: var(--greenLt); color: var(--green); border: 1px solid var(--greenBd); }
+.score-badge.mid  { background: var(--amberLt); color: var(--amber); border: 1px solid var(--amberBd); }
+.score-badge.high { background: var(--redLt);   color: var(--red);   border: 1px solid var(--redBd);   }
+
+.care-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+.care-item {
+  padding: 12px 14px;
+  border: 1px solid var(--gray200);
+  border-radius: var(--radius);
+  background: var(--white);
+}
+.care-item .ci-icon { font-size: 20px; margin-bottom: 5px; }
+.care-item .ci-title { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.care-item .ci-body { font-size: 12px; color: var(--gray500); line-height: 1.5; }
+
+.excl-steps { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.excl-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--gray200);
+  border-radius: var(--radius);
+  background: var(--white);
+}
+.estep-num {
+  min-width: 24px; height: 24px;
+  border-radius: 50%;
+  background: #C47B30;
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.estep-title { font-size: 13px; font-weight: 700; color: var(--gray900); margin-bottom: 3px; }
+.estep-body  { font-size: 12px; color: var(--gray500); line-height: 1.55; }
+
+.restart-row { margin-top: 20px; display: flex; justify-content: center; }
+.btn-restart {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 13px;
+  padding: 8px 20px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--gray300);
+  background: var(--white);
+  color: var(--gray700);
+  cursor: pointer;
+}
+.btn-restart:hover { background: var(--gray50); }
+
+.footer-note {
+  font-size: 12px;
+  color: var(--gray500);
+  line-height: 1.6;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--gray200);
+}
+
+/* ── responsive ── */
+@media (max-width: 680px) {
+  .care-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 440px) {
+  .care-grid { grid-template-columns: 1fr; }
+  .tab-btn { font-size: 12px; padding: 10px 10px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <div class="site-logo">
+      <!-- SVG logo inline - 寵之寶 simplified mark -->
+      <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="寵之寶動物醫院 logo" role="img">
+        <rect width="44" height="44" rx="10" fill="#F5A053"/>
+        <!-- cat face -->
+        <ellipse cx="22" cy="24" rx="10" ry="9" stroke="white" stroke-width="2" fill="none"/>
+        <!-- ears -->
+        <path d="M13 18 L11 12 L17 16" stroke="white" stroke-width="2" fill="none" stroke-linejoin="round"/>
+        <path d="M31 18 L33 12 L27 16" stroke="white" stroke-width="2" fill="none" stroke-linejoin="round"/>
+        <!-- eyes -->
+        <circle cx="18.5" cy="23" r="1.5" fill="white"/>
+        <circle cx="25.5" cy="23" r="1.5" fill="white"/>
+        <!-- nose -->
+        <ellipse cx="22" cy="26.5" rx="1.2" ry="0.9" fill="white"/>
+      </svg>
+      <div>
+        <div class="logo-text">寵之寶動物醫院</div>
+        <div class="logo-sub">毛孩皮膚搔癢評估工具</div>
+      </div>
+    </div>
+    <div class="header-ref">依據 ICADA / WAVD 臨床指引<br>PVAS（犬）・VAScat（貓）</div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Tab navigation -->
+  <div class="tab-nav" role="tablist" aria-label="工具選擇">
+    <button class="tab-btn active" id="tab-pvas" onclick="switchTab('pvas')" role="tab" aria-selected="true" aria-controls="panel-pvas">
+      <span class="tab-num">1</span>搔癢評分量表
+    </button>
+    <button class="tab-btn" id="tab-assess" onclick="switchTab('assess')" role="tab" aria-selected="false" aria-controls="panel-assess">
+      <span class="tab-num">2</span>完整皮膚評估
+    </button>
+  </div>
+
+  <!-- ════════════════════════════ TAB 1: PVAS ════════════════════════════ -->
+  <div class="tab-panel active" id="panel-pvas" role="tabpanel" aria-labelledby="tab-pvas">
+
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">如何客觀評分？</div>
+      <p style="font-size:13px;color:var(--gray500);line-height:1.65">
+        搔癢評分需要「觀察行為、估計頻率」，而非憑直覺。請回想過去兩週，毛孩因搔癢出現的行為——包含抓撓、舔咬、搓臉、甩頭、在地上蹭。
+        犬貓評分標準不同，請先選擇動物類型，再點選最符合的描述。
+      </p>
+    </div>
+
+    <div class="pet-tabs" role="tablist">
+      <button class="pet-tab active" id="ptab-dog" onclick="switchPet('dog')" role="tab">🐕 犬 PVAS</button>
+      <button class="pet-tab" id="ptab-cat" onclick="switchPet('cat')" role="tab">🐱 貓 VAScat</button>
+    </div>
+
+    <div class="hint-box" id="hint-dog">
+      <strong>評分方式（犬）：</strong>觀察過去兩週因搔癢出現的行為——抓撓、舔咬腳趾、搓臉、甩頭、蹭地板。<br>
+      評估三個維度：①每次持續多久、②每天發作幾次、③能否被叫停或分心轉移。
+    </div>
+    <div class="hint-box" style="display:none" id="hint-cat">
+      <strong>評分方式（貓）：</strong>貓咪常以「過度理毛」代替抓撓，要特別觀察舔毛頻率是否異常、腹部或大腿是否出現毛量稀疏、地板是否有大量毛球。<br>
+      後腳抓臉或頸部也是重要搔癢指標。
+    </div>
+
+    <div class="section-eyebrow">點選最符合的描述</div>
+    <div class="score-list" id="pvas-score-list" role="listbox" aria-label="搔癢評分選項"></div>
+
+    <div class="result-box" id="pvas-result">
+      <div class="rx-score" id="pvas-r-score"></div>
+      <div class="rx-label" id="pvas-r-label"></div>
+      <div class="rx-advice" id="pvas-r-advice"></div>
+      <div class="rx-actions" id="pvas-r-actions"></div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════ TAB 2: Assessment ═══════════════════════ -->
+  <div class="tab-panel" id="panel-assess" role="tabpanel" aria-labelledby="tab-assess">
+
+    <!-- Step 0: 選擇動物 -->
+    <div class="step-panel active" id="as0">
+      <div class="step-eyebrow">步驟 1 / 5</div>
+      <h2 class="step-title">選擇您的寵物</h2>
+      <p class="step-sub">評估工具會依照犬貓差異調整評分量表與篩查標準，依據 ICADA 2023 指引設計。</p>
+      <div class="pet-select">
+        <button class="pet-card" id="as-dog" onclick="aSelectPet('dog')">
+          <span class="picon">🐕</span>犬
+        </button>
+        <button class="pet-card" id="as-cat" onclick="aSelectPet('cat')">
+          <span class="picon">🐱</span>貓
+        </button>
+      </div>
+      <div id="err-0" class="err-msg">請先選擇您的寵物類型</div>
+      <div class="nav-row" style="justify-content:flex-end">
+        <button class="btn-fwd" onclick="aNext(1)">開始評估 →</button>
+      </div>
+    </div>
+
+    <!-- Step 1: PVAS -->
+    <div class="step-panel" id="as1">
+      <div class="progress-bar"><div class="progress-fill" style="width:20%"></div></div>
+      <div class="step-eyebrow">步驟 2 / 5｜搔癢程度</div>
+      <h2 class="step-title" id="as1-title">過去兩週，狗狗的搔癢程度如何？</h2>
+      <p class="step-sub" id="as1-sub">點選最符合的描述（可參考左側量表頁了解各分數標準）</p>
+      <div class="score-list" id="as-score-list"></div>
+      <div id="err-1" class="err-msg">請選擇一個搔癢程度分數</div>
+      <div class="nav-row">
+        <span class="step-count">1 / 4</span>
+        <div class="nav-btns">
+          <button class="btn-back" onclick="aBack(0)">← 上一步</button>
+          <button class="btn-fwd" onclick="aNext(2)">下一步 →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: 基本資訊 -->
+    <div class="step-panel" id="as2">
+      <div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div>
+      <div class="step-eyebrow">步驟 3 / 5｜基本資訊</div>
+      <h2 class="step-title">關於您的寵物</h2>
+      <p class="step-sub">這些資訊用於計算 Favrot 異位性皮膚炎篩查分數</p>
+
+      <p style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:8px">首次出現皮膚或搔癢問題時，年齡為？</p>
+      <div class="opts" id="age-opts">
+        <div class="opt" onclick="aSingle(this,'age','lt3')"><div class="radio"></div>3 歲以前</div>
+        <div class="opt" onclick="aSingle(this,'age','3to6')"><div class="radio"></div>3–6 歲</div>
+        <div class="opt" onclick="aSingle(this,'age','gt6')"><div class="radio"></div>6 歲以後</div>
+        <div class="opt" onclick="aSingle(this,'age','unsure')"><div class="radio"></div>不確定</div>
+      </div>
+
+      <p style="font-size:13px;font-weight:700;color:var(--navy);margin:16px 0 8px">主要是室內飼養嗎？</p>
+      <div class="opts" id="indoor-opts">
+        <div class="opt" onclick="aSingle(this,'indoor','yes')"><div class="radio"></div>是，主要在室內</div>
+        <div class="opt" onclick="aSingle(this,'indoor','no')"><div class="radio"></div>否，常在室外或半戶外</div>
+      </div>
+
+      <div id="err-2" class="err-msg">請回答所有問題再繼續</div>
+      <div class="nav-row">
+        <span class="step-count">2 / 4</span>
+        <div class="nav-btns">
+          <button class="btn-back" onclick="aBack(1)">← 上一步</button>
+          <button class="btn-fwd" onclick="aNext(3)">下一步 →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Favrot + 症狀 -->
+    <div class="step-panel" id="as3">
+      <div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div>
+      <div class="step-eyebrow">步驟 4 / 5｜臨床特徵</div>
+      <h2 class="step-title">請勾選符合的描述</h2>
+      <p class="step-sub">依據 Favrot 臨床篩查標準（可複選，未符合任何項目也可繼續）</p>
+
+      <div class="checklist" id="favrot-list">
+        <div class="chk" onclick="aToggle(this,'favrot','steroid')"><div class="chkbox"></div>曾使用類固醇或止癢藥，且初期效果明顯</div>
+        <div class="chk" onclick="aToggle(this,'favrot','ear')"><div class="chkbox"></div>反覆性外耳炎（耳朵不停抓、甩頭、有異味）</div>
+        <div class="chk" onclick="aToggle(this,'favrot','paw')"><div class="chkbox"></div>腳掌或趾縫受影響（不停舔腳）</div>
+        <div class="chk" onclick="aToggle(this,'favrot','earflap')"><div class="chkbox"></div>耳廓內側有皮膚問題</div>
+        <div class="chk" onclick="aToggle(this,'favrot','noback')"><div class="chkbox"></div>背部（背脊）皮膚相對正常，無明顯病灶</div>
+        <div class="chk" onclick="aToggle(this,'favrot','noedge')"><div class="chkbox"></div>耳廓外緣（邊緣）沒有明顯病灶</div>
+        <div class="chk" onclick="aToggle(this,'favrot','season')"><div class="chkbox"></div>症狀有季節性（特定季節明顯加重）</div>
+        <div class="chk" onclick="aToggle(this,'favrot','face')"><div class="chkbox"></div>臉部（眼周、嘴巴）、腋下或腹股溝有皮膚問題</div>
+      </div>
+
+      <div class="step-divider">目前症狀觀察</div>
+      <div class="checklist" id="sym-list">
+        <div class="chk" onclick="aToggle(this,'sym','bacterial')"><div class="chkbox"></div>皮膚有玉米片狀結痂或膿包（疑似細菌感染）</div>
+        <div class="chk" onclick="aToggle(this,'sym','yeast')"><div class="chkbox"></div>皮膚有明顯鹹魚味或油膩感（疑似黴菌感染）</div>
+        <div class="chk" onclick="aToggle(this,'sym','scratch')"><div class="chkbox"></div>皮膚已有因抓撓造成的傷口或脫毛</div>
+      </div>
+
+      <div class="nav-row">
+        <span class="step-count">3 / 4</span>
+        <div class="nav-btns">
+          <button class="btn-back" onclick="aBack(2)">← 上一步</button>
+          <button class="btn-fwd" onclick="aNext(4)">下一步 →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: 排除測試 -->
+    <div class="step-panel" id="as4">
+      <div class="progress-bar"><div class="progress-fill" style="width:85%"></div></div>
+      <div class="step-eyebrow">步驟 5 / 5｜排除確認</div>
+      <h2 class="step-title">哪些情況已經確認或排除？</h2>
+      <p class="step-sub">異位性皮膚炎需排除其他可能原因，請勾選已完成的步驟（可複選）</p>
+
+      <div class="checklist" id="excl-list">
+        <div class="chk" onclick="aToggle(this,'excl','flea')">
+          <div class="chkbox"></div>
+          <div><strong style="font-size:13px;display:block;margin-bottom:2px">已落實全年跳蚤預防</strong><span style="font-size:12px;color:var(--gray500)">每月定期使用跳蚤預防藥物</span></div>
+        </div>
+        <div class="chk" onclick="aToggle(this,'excl','food')">
+          <div class="chkbox"></div>
+          <div><strong style="font-size:13px;display:block;margin-bottom:2px">已完成食物排除試驗</strong><span style="font-size:12px;color:var(--gray500)">嚴格執行 8–12 週水解蛋白飲食且未改善</span></div>
+        </div>
+        <div class="chk" onclick="aToggle(this,'excl','infection')">
+          <div class="chkbox"></div>
+          <div><strong style="font-size:13px;display:block;margin-bottom:2px">繼發感染已由醫師確認並治療</strong><span style="font-size:12px;color:var(--gray500)">細菌或黴菌感染已完整療程治療</span></div>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <span class="step-count">4 / 4</span>
+        <div class="nav-btns">
+          <button class="btn-back" onclick="aBack(3)">← 上一步</button>
+          <button class="btn-fwd" onclick="aNext(5)">查看結果 →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5: 結果 -->
+    <div class="step-panel" id="as5">
+      <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+      <div class="step-eyebrow">評估結果</div>
+      <div id="as-result-content"></div>
+      <div class="restart-row">
+        <button class="btn-restart" onclick="aRestart()">← 重新評估</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+/* ══════════════════════════ PVAS DATA ══════════════════════════ */
+const PVAS = {
+  dog: [
+    { label:"完全無搔癢", head:"完全不搔癢", desc:"兩週內未觀察到任何抓撓、舔腳、搓臉、甩頭等行為。皮膚及被毛狀態良好。", tags:["無抓撓","無舔腳","無甩頭"], level:"success" },
+    { label:"極輕微", head:"極偶爾的輕微搔癢", desc:"兩週內只有 1–2 次輕微短暫的抓撓，持續不到幾秒，叫一聲就能立刻停止，不影響日常活動或睡眠。", tags:["偶發 1–2次/兩週","立刻可停止","不影響睡眠"], level:"success" },
+    { label:"輕微", head:"偶爾輕微搔癢", desc:"每週有 1–2 次短暫的抓撓或舔腳，持續不超過 1 分鐘，叫喚或引開注意力即可停止，行為和睡眠完全正常。", tags:["1–2次/週","可被叫停","睡眠正常"], level:"success" },
+    { label:"輕度", head:"輕度但規律的搔癢", desc:"每天都有短暫搔癢，每次 1–2 分鐘，可分心轉移，不影響進食和睡眠。可能輕微舔腳或偶爾甩頭。", tags:["每天短暫發作","可分心轉移","不影響進食"], level:"success" },
+    { label:"輕中度", head:"稍頻繁、較難分心轉移", desc:"每天多次搔癢，每次 2–5 分鐘，叫喚仍可暫時停止但很快又繼續。可能開始出現舔腳趾縫或輕微甩頭。", tags:["多次/天","叫停後繼續","輕微舔趾縫"], level:"warning" },
+    { label:"中度", head:"明顯頻繁，開始影響生活", desc:"每天多次搔癢，每次超過 5 分鐘，轉移注意力效果差。睡眠偶爾被打斷。常見舔腳、搓臉、腋下或腹股溝發紅。", tags:[">5分鐘/次","夜間偶被打斷","皮膚開始發紅"], level:"warning" },
+    { label:"中重度", head:"持續頻繁，明顯影響睡眠", desc:"幾乎每 1–2 小時就發作一次，每次超過 10 分鐘，叫停無效。睡眠明顯被打斷，夜間抓醒多次。可見趾縫或腋下褪色或皮膚輕微破損。", tags:["每1–2小時發作","夜間多次抓醒","皮膚開始破損"], level:"warning" },
+    { label:"重度", head:"幾乎不間斷，嚴重干擾生活", desc:"超過一半的清醒時間都在搔抓，叫喚完全無法停止。睡眠嚴重受損，明顯焦躁不安。可見明顯脫毛、結痂或皮膚增厚。", tags:["超過一半時間在抓","睡眠嚴重受損","明顯脫毛結痂"], level:"danger" },
+    { label:"嚴重", head:"持續搔抓，皮膚已受傷", desc:"大部分時間都在抓咬，幾乎無法分心。皮膚已有明顯傷口、流血或化膿跡象。整體活動力下降。", tags:["大部分時間抓咬","皮膚流血或化膿","活動力明顯下降"], level:"danger" },
+    { label:"極嚴重", head:"幾乎完全被搔癢佔據", desc:"清醒時幾乎持續不停地搔抓，進食也受到影響。皮膚大面積受損，可能發出異味（繼發感染）。情緒明顯焦躁。", tags:["持續不停","進食受影響","皮膚大面積受損"], level:"danger" },
+    { label:"無法忍受", head:"完全無法自我控制", desc:"24 小時幾乎持續抓咬，完全無法進食或休息。皮膚嚴重受損，有大面積傷口或繼發感染。需要立即緊急就醫。", tags:["24小時持續","無法進食休息","需緊急就醫"], level:"danger" },
+  ],
+  cat: [
+    { label:"完全正常", head:"完全正常的理毛行為", desc:"每天理毛 2–4 次，每次不超過 15 分鐘，集中在正常部位。毛量豐厚均勻，地板沒有額外的毛球。", tags:["2–4次/天","時間正常","毛量正常"], level:"success" },
+    { label:"極輕微", head:"理毛次數略多，不明顯", desc:"理毛次數比平時稍多，但幾乎很難察覺。被毛正常，沒有稀疏或禿毛跡象。偶爾會抓一下耳朵或臉。", tags:["略多於平常","難以察覺","毛量正常"], level:"success" },
+    { label:"輕微", head:"理毛稍頻繁，局部注意", desc:"每週可觀察到幾次較長的理毛，偶爾注意到某個部位毛量略稀疏，或地板偶有毛球。", tags:["局部輕微稀疏","偶見地板毛球","偶發抓耳朵"], level:"success" },
+    { label:"輕度", head:"過度理毛跡象，局部稀疏", desc:"每天都有明顯較長的理毛，腹部或大腿內側開始出現可見的毛量稀疏，地板毛球增加。偶爾用後腳抓臉或頸部。", tags:["腹部/大腿輕微禿","地板毛球增加","偶爾後腳抓臉"], level:"success" },
+    { label:"輕中度", head:"頻繁理毛，稀疏區域擴大", desc:"頻繁且長時間的理毛，腹部或大腿內側有明顯的毛量減少（可見皮膚）。每天都用後腳抓臉、耳後或頸部。", tags:["腹部可見皮膚","每天抓臉抓頸","理毛時間明顯增加"], level:"warning" },
+    { label:"中度", head:"對稱性脫毛，搔癢行為頻繁", desc:"腹部、大腿內側、側腹出現對稱性明顯脫毛。每天多次長時間理毛，可能有皮膚輕微發紅。睡眠偶爾被打斷。", tags:["對稱性明顯脫毛","皮膚輕微發紅","睡眠偶被打斷"], level:"warning" },
+    { label:"中重度", head:"大面積脫毛，行為改變", desc:"腹部、大腿、側腹、背部大面積脫毛。幾乎不間斷地理毛或抓癢，明顯焦躁，食慾略降。可見皮膚發紅或輕微結痂。", tags:["大面積脫毛","明顯焦躁","皮膚發紅結痂"], level:"warning" },
+    { label:"重度", head:"皮膚受損，行為嚴重改變", desc:"全身多處大面積脫毛，皮膚已有破損、結痂或化膿。幾乎持續不斷地理毛或抓癢，食慾明顯下降。", tags:["多處皮膚破損","食慾明顯下降","失去互動興趣"], level:"danger" },
+    { label:"嚴重", head:"廣泛皮膚受損，極度焦躁", desc:"大面積皮膚發炎、化膿或潰瘍，可能發出異味。幾乎整日都在理毛或抓咬，進食嚴重受影響。", tags:["廣泛化膿或潰瘍","進食嚴重受影響","攻擊性增加"], level:"danger" },
+    { label:"極嚴重", head:"持續自殘，緊急狀態", desc:"幾乎持續不斷地理毛或咬毛，造成大面積自殘性傷口。進食幾乎停止，嚴重脫水或衰弱跡象，需要立即就醫。", tags:["大面積自殘傷口","幾乎停止進食","需立即就醫"], level:"danger" },
+    { label:"無法控制", head:"完全失控，緊急就醫", desc:"無法停止的自殘行為，皮膚大面積嚴重受損，可能需要緊急止痛或鎮靜處理。這屬於醫療緊急狀況，需要立即就醫。", tags:["醫療緊急狀況","需緊急就醫"], level:"danger" },
+  ]
+};
+
+const PVAS_ADVICE = {
+  success: { cls:"success", label:"輕微或無搔癢（0–3 分）", advice:"目前搔癢程度在正常範圍內。建議每月記錄一次評分作為追蹤基準，若評分上升可做比對。繼續維持日常環境管理與皮膚照護即可。" },
+  warning: { cls:"warning", label:"中度搔癢（4–6 分）", advice:"搔癢程度已影響生活品質，建議 1–2 週內安排獸醫師評估。請記錄搔癢發生的時間、部位和可能誘因，帶去就診時提供參考，有助診斷。" },
+  danger:  { cls:"danger",  label:"嚴重搔癢（7–10 分）", advice:"搔癢程度嚴重，建議盡快（7 天內）就醫。若皮膚已有傷口、流血或化膿，請儘快就醫，防止繼發性感染惡化。" }
+};
+
+let pvasPet = 'dog';
+let pvasSelected = null;
+
+function switchPet(p) {
+  pvasPet = p;
+  pvasSelected = null;
+  document.getElementById('ptab-dog').classList.toggle('active', p==='dog');
+  document.getElementById('ptab-cat').classList.toggle('active', p==='cat');
+  document.getElementById('hint-dog').style.display = p==='dog' ? 'block' : 'none';
+  document.getElementById('hint-cat').style.display = p==='cat' ? 'block' : 'none';
+  document.getElementById('pvas-result').classList.remove('show','success','warning','danger');
+  renderPVAS();
+}
+
+function renderPVAS() {
+  const el = document.getElementById('pvas-score-list');
+  el.innerHTML = PVAS[pvasPet].map((d,i) => `
+    <div class="score-row s${i} ${pvasSelected===i?'active':''}" onclick="pvasSelect(${i})" role="option" aria-selected="${pvasSelected===i}">
+      <div class="score-num">
+        <div class="num-val">${i}</div>
+        <div class="num-label">${d.label}</div>
+      </div>
+      <div class="score-content">
+        <div class="score-head">${d.head}</div>
+        <div class="score-desc">${d.desc}</div>
+        <div class="criteria-tags">${d.tags.map(t=>`<span class="ctag">${t}</span>`).join('')}</div>
+      </div>
+    </div>`).join('');
+}
+
+function pvasSelect(i) {
+  pvasSelected = i;
+  renderPVAS();
+  const d = PVAS[pvasPet][i];
+  const lvl = i<=3?'success':i<=6?'warning':'danger';
+  const adv = PVAS_ADVICE[lvl];
+  const box = document.getElementById('pvas-result');
+  box.className = 'result-box show ' + adv.cls;
+  document.getElementById('pvas-r-score').textContent = `評分 ${i} / 10　${d.label}`;
+  document.getElementById('pvas-r-label').textContent = adv.label;
+  document.getElementById('pvas-r-advice').textContent = adv.advice;
+  document.getElementById('pvas-r-actions').innerHTML = lvl !== 'success'
+    ? `<button class="btn-next" onclick="switchTab('assess');aSelectPet('${pvasPet}');aNext(1)">繼續完整評估 →</button>`
+    : '';
+  box.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+renderPVAS();
+
+/* ══════════════════════════ ASSESSMENT ══════════════════════════ */
+const aState = {
+  pet: null, pvas: null,
+  age: null, indoor: null,
+  favrot: new Set(), sym: new Set(), excl: new Set()
+};
+
+function switchTab(t) {
+  ['pvas','assess'].forEach(id => {
+    document.getElementById('tab-'+id).classList.toggle('active', id===t);
+    document.getElementById('tab-'+id).setAttribute('aria-selected', id===t);
+    document.getElementById('panel-'+id).classList.toggle('active', id===t);
+  });
+}
+
+function aGoStep(n) {
+  document.querySelectorAll('.step-panel').forEach((el,i) => el.classList.toggle('active', i===n));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function aSelectPet(p) {
+  aState.pet = p;
+  document.getElementById('as-dog').classList.toggle('active', p==='dog');
+  document.getElementById('as-cat').classList.toggle('active', p==='cat');
+  document.getElementById('err-0').style.display = 'none';
+  const isDog = p==='dog';
+  document.getElementById('as1-title').textContent = isDog
+    ? '過去兩週，狗狗的搔癢程度如何？'
+    : '過去兩週，貓咪搔癢或過度理毛的程度如何？';
+  document.getElementById('as1-sub').textContent = isDog
+    ? '點選最符合的描述（可參考左側量表頁了解各分數標準）'
+    : '包含過度舔毛、撥抓、腹部稀疏、地板毛球等，點選最符合的描述';
+  renderAsScore();
+}
+
+function renderAsScore() {
+  if (!aState.pet) return;
+  const el = document.getElementById('as-score-list');
+  el.innerHTML = PVAS[aState.pet].map((d,i) => `
+    <div class="score-row s${i} ${aState.pvas===i?'active':''}" onclick="asSelectScore(${i})">
+      <div class="score-num">
+        <div class="num-val">${i}</div>
+        <div class="num-label">${d.label}</div>
+      </div>
+      <div class="score-content">
+        <div class="score-head">${d.head}</div>
+        <div class="score-desc">${d.desc}</div>
+        <div class="criteria-tags">${d.tags.map(t=>`<span class="ctag">${t}</span>`).join('')}</div>
+      </div>
+    </div>`).join('');
+}
+
+function asSelectScore(i) {
+  aState.pvas = i;
+  renderAsScore();
+  document.getElementById('err-1').style.display = 'none';
+}
+
+function aSingle(el, key, val) {
+  aState[key] = val;
+  el.parentElement.querySelectorAll('.opt').forEach(o => o.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('err-2').style.display = 'none';
+}
+
+function aToggle(el, group, val) {
+  el.classList.toggle('active');
+  aState[group].has(val) ? aState[group].delete(val) : aState[group].add(val);
+}
+
+function aNext(to) {
+  if (to===1 && !aState.pet) { document.getElementById('err-0').style.display='block'; return; }
+  if (to===2 && aState.pvas===null) { document.getElementById('err-1').style.display='block'; return; }
+  if (to===3 && (!aState.age || !aState.indoor)) { document.getElementById('err-2').style.display='block'; return; }
+  if (to===5) buildResult();
+  aGoStep(to);
+}
+
+function aBack(to) { aGoStep(to); }
+
+function buildResult() {
+  const pvas = aState.pvas;
+  const isCat = aState.pet === 'cat';
+  const lvl = pvas<=3?'low':pvas<=6?'mid':'high';
+
+  let fScore = 0;
+  if (aState.age==='lt3') fScore++;
+  if (aState.indoor==='yes') fScore++;
+  aState.favrot.forEach(() => fScore++);
+
+  const hasBact = aState.sym.has('bacterial');
+  const hasYeast = aState.sym.has('yeast');
+  const hasScratch = aState.sym.has('scratch');
+  const fleasDone = aState.excl.has('flea');
+  const foodDone = aState.excl.has('food');
+  const infDone = aState.excl.has('infection');
+
+  const badge = `<div class="score-badge ${lvl}">${isCat?'VAScat':'PVAS'} ${pvas}/10　${PVAS[aState.pet][pvas].label}</div>`;
+
+  let urgent = '';
+  if (pvas>=7) urgent = `<div class="result-card danger"><h3>建議盡快就診（7 天內）</h3><p>搔癢程度嚴重（${pvas}/10）${hasScratch?'，且皮膚已有傷口':''}。持續搔抓可能造成更嚴重的繼發感染，請盡快安排獸醫師評估。</p></div>`;
+  else if (pvas>=5) urgent = `<div class="result-card warning"><h3>建議近期就診（1–2 週內）</h3><p>中度搔癢（${pvas}/10）持續中，建議就診確認是否有感染或其他誘發因素。</p></div>`;
+
+  let adRisk='', adCls='', adTitle='';
+  if (fScore>=5) { adCls='danger'; adTitle='高度懷疑異位性皮膚炎'; adRisk=`符合 ${fScore}/10 項臨床標準（Favrot）。請安排獸醫師皮膚科評估，排除其他原因後確認診斷。敏感性約 85%，仍需醫師確認。`; }
+  else if (fScore>=3) { adCls='warning'; adTitle='有一定可能性，建議就診評估'; adRisk=`符合 ${fScore}/10 項臨床標準。有一定程度的異位性皮膚炎可能性，同時應留意其他誘發因子（跳蚤、食物過敏、感染）。`; }
+  else { adCls='success'; adTitle='目前篩查分數較低'; adRisk=`符合 ${fScore}/10 項臨床標準，異位性皮膚炎的可能性較低，但仍需排除其他原因。`; }
+
+  let infNote = '';
+  if (hasBact||hasYeast) infNote = `<div class="result-card warning"><h3>疑似繼發感染——優先處理</h3><p>${hasBact?'玉米片狀結痂或膿包提示可能有細菌感染（金黃葡萄球菌）。':''}${hasYeast?'鹹魚味或油膩感提示可能有馬拉色菌（黴菌）感染。':''}繼發感染是「最主要的搔癢誘發因子」，優先治療後搔癢可能大幅改善。</p></div>`;
+
+  const steps = [];
+  if (!fleasDone) steps.push(['確立全年跳蚤預防','每月定期使用跳蚤預防藥。跳蚤過敏（FAD）是最常見誘發因子，即使1隻跳蚤也能引爆症狀。']);
+  if (!infDone && (hasBact||hasYeast)) steps.push(['就診治療繼發感染','需要醫師處方藥物，症狀消失後再延長至少 1 週「鞏固期」，切勿自行停藥。']);
+  if (!foodDone) steps.push(['食物過敏排除試驗（8–12 週）','使用水解蛋白或單蛋白質飲食，試驗期間 100% 禁止零食、水果及潔牙骨，否則需重新計時。']);
+  if (fScore>=3) steps.push(['就診皮膚科評估','依臨床特徵懷疑異位性皮膚炎，建議由醫師確認診斷並討論長期管理策略。']);
+
+  const exclPlan = steps.length>0 ? `<div class="result-card accent"><h3>建議排除步驟（依優先順序）</h3><div class="excl-steps">${steps.map((s,i)=>`<div class="excl-step"><div class="estep-num">${i+1}</div><div><div class="estep-title">${s[0]}</div><div class="estep-body">${s[1]}</div></div></div>`).join('')}</div></div>` : '';
+
+  const care = [
+    { icon:'🛁', title:'規律洗澡', body: pvas>=7?'每 3–7 天一次，使用醫師建議藥浴，留置 10 分鐘，水溫 25–30°C。':pvas>=4?'每 7–14 天一次，選用保濕或殺菌配方，留置 10 分鐘。':'每 2–4 週一次，保濕洗毛精，花粉季每週一次。' },
+    { icon:'🌡️', title:'環境溫濕度控制', body:'室內溫度建議維持 22–26°C，相對濕度 50–60%，可有效抑制塵蟎與黴菌繁殖。搭配 HEPA 吸塵器及空氣清淨機定期清潔。' },
+    { icon:'👕', title:'貼身衣物與床鋪清潔', body:'睡毯與貼身衣物建議每日更換。睡墊與玩具每週以 55°C 以上熱水清洗，可徹底殺滅塵蟎，單純晾曬無法達到相同效果。' },
+    { icon:'🐾', title:'外出擦拭', body:'外出回家後以濕毛巾擦拭腳掌、腋下、腹部，主動移除附著的花粉、塵蟎等刺激原，花粉季尤其重要。' },
+    { icon:'🦟', title:'跳蚤全年預防', body:'全年不中斷定期使用跳蚤預防藥物。跳蚤過敏可讓搔癢症狀快速加劇，預防遠比治療重要。' },
+    { icon:'🏃', title:'運動量提升與壓力舒緩', body:'充足運動與互動遊戲有助於分散搔抓注意力，降低因焦慮引起的自發性抓咬行為。規律陪伴與豐富化環境刺激是最佳壓力管理策略。' },
+    { icon:'🐟', title:'Omega-3 魚油', body:'深海魚油（EPA+DHA），治療劑量 40–100 mg/kg/天，有助調節全身發炎反應並修復皮膚屏障，補充 4–8 週後見效。' },
+    { icon:'💊', title:'皮毛保健成分', body:'以下成分可與獸醫師討論後補充：鱉蛋粉（優質蛋白・毛髮生長）、鋅 Zn（皮膚修復再生）、口服玻尿酸（皮膚保水）、口服神經醯胺 Ceramide（屏障修復）、益生菌（腸道免疫調節）。' },
+    { icon:'📊', title:'每月評分記錄', body:`使用 ${isCat?'VAScat':'PVAS'} 量表每月評分一次，拍下皮膚照片帶去就診，幫助醫師追蹤療效並適時調整照護計畫。` }
+  ];
+
+  document.getElementById('as-result-content').innerHTML = `
+    ${badge}
+    ${urgent}
+    <div class="result-card ${adCls}"><h3>${adTitle}</h3><p>${adRisk}</p></div>
+    ${infNote}
+    ${exclPlan}
+    <div style="font-size:13px;font-weight:700;color:var(--navy);margin:16px 0 8px">日常照護建議</div>
+    <div class="care-grid">${care.map(c=>`<div class="care-item"><div class="ci-icon">${c.icon}</div><div class="ci-title">${c.title}</div><div class="ci-body">${c.body}</div></div>`).join('')}</div>
+    <div class="footer-note">本工具依據 ICADA / WAVD 臨床指引設計，僅供飼主自我評估參考，不代表醫療診斷。如有疑問請諮詢主治獸醫師。</div>
+  `;
+}
+
+function aRestart() {
+  aState.pet=null; aState.pvas=null; aState.age=null; aState.indoor=null;
+  aState.favrot.clear(); aState.sym.clear(); aState.excl.clear();
+  document.querySelectorAll('.opt,.chk').forEach(el => el.classList.remove('active'));
+  document.getElementById('as-dog').classList.remove('active');
+  document.getElementById('as-cat').classList.remove('active');
+  aGoStep(0);
+}
+</script>
+
+<div style="background:#FFF7F0;border-top:2px solid #F5A053;padding:18px 0;margin-top:0">
+  <div style="max-width:820px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+    <svg width="52" height="52" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0" aria-hidden="true">
+      <rect width="44" height="44" rx="10" fill="#F5A053"/>
+      <ellipse cx="22" cy="24" rx="10" ry="9" stroke="white" stroke-width="2" fill="none"/>
+      <path d="M13 18 L11 12 L17 16" stroke="white" stroke-width="2" fill="none" stroke-linejoin="round"/>
+      <path d="M31 18 L33 12 L27 16" stroke="white" stroke-width="2" fill="none" stroke-linejoin="round"/>
+      <circle cx="18.5" cy="23" r="1.5" fill="white"/>
+      <circle cx="25.5" cy="23" r="1.5" fill="white"/>
+      <ellipse cx="22" cy="26.5" rx="1.2" ry="0.9" fill="white"/>
+    </svg>
+    <div style="flex:1;min-width:200px">
+      <div style="font-size:16px;font-weight:700;color:#2C1A0E;margin-bottom:6px">寵之寶動物醫院</div>
+      <div style="display:flex;flex-wrap:wrap;gap:14px">
+        <span style="font-size:13px;color:#6B4A2A;display:flex;align-items:center;gap:5px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F5A053" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          台北市大安區信義路四段294巷3號1樓
+        </span>
+        <a href="tel:0223253899" style="font-size:13px;color:#6B4A2A;text-decoration:none;display:flex;align-items:center;gap:5px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F5A053" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6 19.79 19.79 0 0 1 1.61 5.1 2 2 0 0 1 3.6 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.6a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          02 2325 3899
+        </a>
+      </div>
+    </div>
+    <div style="font-size:12px;color:#9A6840;line-height:1.6;max-width:320px">
+      💡 本工具為寵之寶動物醫院提供的飼主參考工具。評估結果僅供參考，不代表醫療診斷。如對結果有疑問或需要個別化診療建議，歡迎來院諮詢獸醫師。
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
